@@ -1,14 +1,16 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from bs4 import BeautifulSoup
-import uuid
+from dateutil.parser import parse
 import requests
 import re
 
 app = Flask(__name__)
 CORS(app)  # Permette richieste da React (localhost:3000)
 MMUL_URL = "https://www.miamammausalinux.org/"
+FOSS_URL = "https://fossforce.com/"
 
+default_pfp = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png"
 
 def extract_between(text: str, str_start: str, str_end: str) -> str:
     pattern = re.escape(str_start) + r'(.*?)' + re.escape(str_end)
@@ -61,7 +63,7 @@ def scrape_mmul():
                 'title': title,
                 'metadata':{
                     'published_date':date,
-                    'author': {'title':author, "pfp": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png"},
+                    'author': {'title':author, "pfp": default_pfp},
                     'date': date,
                     'imgix_url': img_url,
                     'teaser': teaser,
@@ -74,7 +76,6 @@ def scrape_mmul():
             return []
 
     return articles.copy()
-
 
 def get_article_mmul(url):
     str_start = '<p>'    
@@ -112,7 +113,7 @@ def get_article_mmul(url):
             "imgix_url" : thumbnails,
             "published_date": created_at,
             "author":{
-                "pfp": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Default_pfp.svg/340px-Default_pfp.svg.png",
+                "pfp": default_pfp,
                 'title': author_name
             }
         },
@@ -121,24 +122,72 @@ def get_article_mmul(url):
 
     return jsonify(article)
 
+def scrape_foss():
+    response = requests.get(FOSS_URL)
+    if response.status_code != 200:
+        print(f"Errore nel caricamento della pagina: {response.status_code}")
+        return []
 
+    soup = BeautifulSoup(response.text, 'html.parser')
+    articles = []
+
+    for post in soup.select('div.loop-container > div.entry'):
+        article_tag = post.find('article')
+
+        title_tag = article_tag.select_one('h2.post-title a')
+        title = title_tag.text.strip()
+        link = title_tag['href'].strip()
+
+        byline = article_tag.select_one('.post-byline')
+        author = byline.text.strip().split(' on ')[0].replace("By ", "")
+        date = byline.text.strip().split(' on ')[-1].split(' | ')[0].strip()
+
+        img_tag = article_tag.select_one('.featured-image img')
+        img_url = img_tag['src'] if img_tag else None
+
+        teaser_tag = article_tag.select_one('.post-content p')
+        teaser = teaser_tag.text.strip() if teaser_tag else ''
+
+        article = {
+            'id': link,
+            'title': title,
+            'metadata': {
+                'published_date': date,
+                'author': {'title': author, 'pfp': default_pfp},
+                'date': date,
+                'imgix_url': img_url,
+                'teaser': teaser,
+            }
+        }
+
+        articles.append(article)
+    return articles.copy()
+
+
+def parse_date(post):
+    try:
+        dt = parse(post["metadata"]["date"])
+        return dt.replace(tzinfo=None)
+    except Exception as e:
+        print(f"[!] Errore parsing data per '{post['title']}': {e}")
+        return datetime.min
 
 
 @app.route('/api/posts', methods=['POST'])
 def get_post():
-
-
     data = request.json
     url = data.get('url')
     return get_article_mmul(url)
 
-
 @app.route('/api/posts', methods=['GET'])
-def get_mock_posts():
+def get_all_posts():
     posts = []
     posts += scrape_mmul()
+    posts += scrape_foss()
 
-    return jsonify(posts)
+    sorted_posts = sorted(posts, key=parse_date, reverse=True)
+
+    return jsonify(sorted_posts)
 
 
 
