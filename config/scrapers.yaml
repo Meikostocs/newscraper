@@ -1,0 +1,7 @@
+fossforce.com:
+  name: FOSSScraper
+  base_url: https://fossforce.com/
+
+miamammausalinux.org:
+  name: MMULScraper
+  base_url: https://www.miamammausalinux.org/
