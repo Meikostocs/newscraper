@@ -5,3 +5,9 @@ fossforce.com:
 miamammausalinux.org:
   name: MMULScraper
   base_url: https://www.miamammausalinux.org/
+
+bleepingcomputer.com:
+  name: BleepingComputer
+  base_url: https://www.bleepingcomputer.com
+
+  

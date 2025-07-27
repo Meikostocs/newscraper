@@ -6,9 +6,6 @@ from urllib.parse import urlparse
 from utils.extractor import extract_between
 from utils.parser import parse_date, get_scraper_classes
 
-
-
-
 SCRAPER_MAP = get_scraper_classes()
 
 app = Flask(__name__)
@@ -23,7 +20,6 @@ def get_post():
     return jsonify(scraper_class.get_article(url))
 
 
-
 @app.route('/api/posts', methods=['GET'])
 def get_all_posts():
     posts = []
@@ -31,7 +27,6 @@ def get_all_posts():
         posts += scraper_class.scrape().copy()
     sorted_posts = sorted(posts, key=parse_date, reverse=True)
     return jsonify(sorted_posts)
-
 
 
 @app.route('/api/global', methods=['GET'])

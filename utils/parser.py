@@ -5,11 +5,13 @@ from dateutil.parser import parse
 
 from scraper.mmul_scaper import MMULScraper
 from scraper.foss_scraper import FOSSScraper
+from scraper.bleepingcomputer_scraper import BleepingComputerScraper
 
 
 SCRAPER_CLASSES = {
     "FOSSScraper": FOSSScraper,
-    "MMULScraper": MMULScraper
+    "MMULScraper": MMULScraper,
+    "BleepingComputer": BleepingComputerScraper
 }
 
 

@@ -93,8 +93,6 @@ class FOSSScraper(Scraper):
                 author_name = match.group(1)
                 created_at = match.group(2)
 
-
-
         # Get article body
         allowed_tags = ['p', 'li', 'blockquote', 'h2', 'h3', 'table', 'th', 'tr', 'td']
 
