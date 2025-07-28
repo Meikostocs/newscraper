@@ -11,9 +11,9 @@ from scraper.bleepingcomputer_scraper import BleepingComputerScraper
 from scraper.rhc_scraper import RHCScraper
 
 SCRAPER_CLASSES = {
-    # "FOSSScraper": FOSSScraper,
-    # "MMULScraper": MMULScraper,
-    # "BleepingComputer": BleepingComputerScraper,
+    "FOSSScraper": FOSSScraper,
+    "MMULScraper": MMULScraper,
+    "BleepingComputer": BleepingComputerScraper,
     "RedHotCyber": RHCScraper
 }
 
