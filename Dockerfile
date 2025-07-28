@@ -2,13 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies if needed (e.g., for BeautifulSoup)
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install --no-cache-dir gunicorn
+
 COPY . .
 
-# Backend runs on 8000 but not exposed outside
-CMD ["python", "backend.py"]
+EXPOSE 8000
+
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "backend:app"]
