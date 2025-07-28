@@ -104,6 +104,9 @@ class BleepingComputerScraper(Scraper):
             first_img.find_parent('p').decompose()
 
         text = extract_between(str(soup), '<div class="articleBody">', "<style>")
+
+        if text=="":
+            text = extract_between(str(soup), '<div class="articleBody">', "</article>")
     
         article = {
             "id": article_id,
