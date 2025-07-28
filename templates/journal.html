@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+
+    .page{
+      width: 100%;
+      align-items: center;
+    }
+
+    .article-inner{
+      background: #f0f0f0;
+      padding: 20px;
+    }
+
+    p, li, tr, ol, td, th{
+      color: black;
+    }
+
+    li{
+      padding-left: 20px;
+    }
+    
+    .title, .meta{
+      font-style: italic;
+      color: black;
+    }
+    .title{
+      font-size: medium;
+      text-decoration: solid;
+      font-weight: bold;
+    }
+    .content{
+      font-family: sans-serif;
+      width: 100%;
+      text-align: justify;
+    }
+
+
+    .author {
+      width: 100%;
+      color: black;
+      display: flex;
+      flex-direction: row-reverse;  
+      justify-content: flex-start;  
+      align-items: center;
+      gap: 8px;
+      text-align: right;
+    }
+
+
+    img{
+      max-width: 100%;
+    }
+
+    .thumbnail-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;  
+      align-items: center;      
+    }
+    .thumbnail {
+      display: block;           
+      margin: 0 auto;           
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+
+
+  </style>
+</head>
+<body>
+  {% for article in articles %}
+    <div class="page">
+      <div class="article-inner">
+        <div class="title">{{ article.title }}</div>
+        <div class="meta">{{ article.metadata.published_date }}</div>
+        
+        <div class="thumbnail-container">
+        {% if article.metadata.imgix_url %}
+          <img src="{{ article.metadata.imgix_url }}" class="thumbnail" />
+        {% endif %}
+        </div>
+
+        {% if article.metadata.teaser %}
+          <div class="content">{{ article.metadata.teaser | safe }}</div>
+        {% endif %}
+
+        {% if article.text %}
+          <div class="content">{{ article.text | safe }}</div>
+        {% endif %}
+
+        {% if article.metadata.author %}
+          <div class="author">
+            {{ article.metadata.author.title or 'Autore sconosciuto' }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="page-break"></div>
+  {% endfor %}
+</body>
+</html>

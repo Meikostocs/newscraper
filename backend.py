@@ -1,7 +1,11 @@
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file, render_template
 from flask_cors import CORS
 from urllib.parse import urlparse
+from weasyprint import HTML
+from datetime import datetime, timedelta
+from io import BytesIO
+from dateutil import parser
 
 from utils.extractor import extract_between
 from utils.parser import parse_date, get_scraper_classes, sanitize_parameters
@@ -58,6 +62,39 @@ def get_mock_global():
         }
     })
 
+
+@app.route("/api/newspaper", methods=["GET"])
+def generate_newspaper():
+    """
+    Generate a PDF newspaper containing articles published yesterday.
+
+    - Iterates over all configured scrapers in SCRAPER_MAP.
+    - For each scraper, calls `scrape()` to get article summaries.
+    - Filters articles whose `published_date` matches yesterday's date.
+    - Uses `get_article(id)` to retrieve full content for matching articles.
+    - Renders the articles into HTML using the `journal.html` template.
+    - Converts the rendered HTML into a PDF using WeasyPrint.
+    - Returns the PDF file as an HTTP response with appropriate headers.
+
+    Returns:
+        A Flask `send_file` response containing the generated PDF.
+    """
+    articles = []
+    yesterday = datetime.now().date() - timedelta(days=1)
+    for _, scraper in SCRAPER_MAP.items():
+        for a in scraper.scrape():
+            print(_)
+            date_str = a["metadata"]["published_date"]
+            pub_date = datetime.strptime(date_str, "%b %d, %Y").date()
+            if  yesterday == pub_date:
+                    full = scraper.get_article(a["id"])
+                    articles.append(full)
+
+    html = render_template("journal.html", articles=articles)
+    pdf_io = BytesIO()
+    HTML(string=html).write_pdf(pdf_io)
+    pdf_io.seek(0)
+    return send_file(pdf_io, download_name=f"newspaper.pdf", mimetype="application/pdf")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=False)

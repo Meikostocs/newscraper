@@ -4,6 +4,7 @@ from dateutil.parser import parse
 from utils.extractor import extract_between
 from scraper.scraper import Scraper
 from urllib.parse import urlparse, urlunparse
+from datetime import datetime
 import re
 
 class FOSSScraper(Scraper):
@@ -33,7 +34,9 @@ class FOSSScraper(Scraper):
             byline = article_tag.select_one('.post-byline')
             author = byline.text.strip().split(' on ')[0].replace("By ", "")
             date = byline.text.strip().split(' on ')[-1].split(' | ')[0].strip()
-
+            parsed_date = datetime.strptime(date, "%B %d, %Y")
+            date = parsed_date.strftime("%b %d, %Y")
+            
             img_tag = article_tag.select_one('.featured-image img')
             img_url = img_tag['src'] if img_tag else None
 

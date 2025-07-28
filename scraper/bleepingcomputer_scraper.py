@@ -4,6 +4,8 @@ from dateutil.parser import parse
 from utils.extractor import extract_between
 from scraper.scraper import Scraper
 import re
+from datetime import datetime
+import jsonify
 
 class BleepingComputerScraper(Scraper):
 
@@ -49,6 +51,8 @@ class BleepingComputerScraper(Scraper):
 
                     date_tag = li.select_one('.bc_news_date')
                     date = date_tag.get_text(strip=True) if date_tag else ''
+                    parsed_date = datetime.strptime(date, "%B %d, %Y")
+                    date = parsed_date.strftime("%b %d, %Y")
 
                     articles.append({
                         'id': link,
@@ -94,7 +98,7 @@ class BleepingComputerScraper(Scraper):
 
         date_tag = soup.select_one('.cz-news-date')
         created_at = date_tag.get_text(strip=True) if date_tag else None
-
+        
         article_body = soup.find('div', class_='articleBody')
         first_img = article_body.find('img')
         thumbnails = first_img['src'] if first_img else None

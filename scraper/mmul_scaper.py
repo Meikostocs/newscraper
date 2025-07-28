@@ -47,7 +47,9 @@ class MMULScraper(Scraper):
 
                 time_tag = div.select_one('div.wp-block-post-date time')
                 date = time_tag['datetime'] if time_tag else None
-
+                dt = parse(date)
+                date = dt.strftime("%b %d, %Y")
+                
                 teaser_p = div.select_one('div.wp-block-post-excerpt p')
                 teaser = teaser_p.text.strip() if teaser_p else None
 
@@ -94,6 +96,8 @@ class MMULScraper(Scraper):
 
         time_tag = soup.find('time')
         created_at = time_tag['datetime'] if time_tag and time_tag.has_attr('datetime') else ''
+        dt = parse(created_at)
+        created_at = dt.strftime("%B %d, %Y")
 
         author_name = soup.find('a', class_="m-a-box-name-url")
         author_name = author_name.get_text(strip=True)
