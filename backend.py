@@ -65,6 +65,20 @@ def get_mock_global():
 
 @app.route("/api/newspaper", methods=["GET"])
 def generate_newspaper():
+    """
+    Generate a PDF newspaper containing articles published yesterday.
+
+    - Iterates over all configured scrapers in SCRAPER_MAP.
+    - For each scraper, calls `scrape()` to get article summaries.
+    - Filters articles whose `published_date` matches yesterday's date.
+    - Uses `get_article(id)` to retrieve full content for matching articles.
+    - Renders the articles into HTML using the `journal.html` template.
+    - Converts the rendered HTML into a PDF using WeasyPrint.
+    - Returns the PDF file as an HTTP response with appropriate headers.
+
+    Returns:
+        A Flask `send_file` response containing the generated PDF.
+    """
     articles = []
     yesterday = datetime.now().date() - timedelta(days=1)
     for _, scraper in SCRAPER_MAP.items():
@@ -83,5 +97,5 @@ def generate_newspaper():
     return send_file(pdf_io, download_name=f"newspaper.pdf", mimetype="application/pdf")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=False)
 
