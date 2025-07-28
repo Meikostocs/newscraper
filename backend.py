@@ -63,16 +63,16 @@ def get_mock_global():
     })
 
 
-@app.route("/api/pdf", methods=["GET"])
-def generate_pdf():
+@app.route("/api/newspaper", methods=["GET"])
+def generate_newspaper():
     articles = []
-    yesterday = datetime.now().date() - timedelta(days=2)
+    yesterday = datetime.now().date() - timedelta(days=1)
     for _, scraper in SCRAPER_MAP.items():
         for a in scraper.scrape():
             print(_)
             date_str = a["metadata"]["published_date"]
             pub_date = datetime.strptime(date_str, "%b %d, %Y").date()
-            if  datetime.now().date() == pub_date:
+            if  yesterday == pub_date:
                     full = scraper.get_article(a["id"])
                     articles.append(full)
 
