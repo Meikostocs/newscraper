@@ -66,16 +66,16 @@ def get_mock_global():
 @app.route("/api/pdf", methods=["GET"])
 def generate_pdf():
     articles = []
-    yesterday = datetime.now().date() - timedelta(days=1)
+    yesterday = datetime.now().date() - timedelta(days=2)
     for _, scraper in SCRAPER_MAP.items():
         for a in scraper.scrape():
+            print(_)
             date_str = a["metadata"]["published_date"]
-            pub_date = datetime.strptime(date_str, "%B %d, %Y").date()
+            pub_date = datetime.strptime(date_str, "%b %d, %Y").date()
             if  datetime.now().date() == pub_date:
                     full = scraper.get_article(a["id"])
                     articles.append(full)
 
-    print(f"Found {len(articles)} articles for {yesterday}")
     html = render_template("journal.html", articles=articles)
     pdf_io = BytesIO()
     HTML(string=html).write_pdf(pdf_io)

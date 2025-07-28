@@ -8,75 +8,73 @@
       margin: 1cm;
     }
 
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
+    .page{
+      width: 100%;
+      align-items: center;
     }
 
-    .page {
-      background-color: #f0f0f0;
-      min-height: 100vh;
+    .article-inner{
+      background: #f0f0f0;
+      padding: 20px;
+    }
+
+    p, li, tr, ol, td, th{
+      color: black;
+    }
+
+    li{
+      padding-left: 20px;
+    }
+    
+    .title, .meta{
+      font-style: italic;
+      color: black;
+    }
+    .title{
+      font-size: medium;
+      text-decoration: solid;
+      font-weight: bold;
+    }
+    .content{
+      font-family: sans-serif;
+      width: 100%;
+      text-align: justify;
+    }
+
+
+    .author {
+      width: 100%;
+      color: black;
       display: flex;
-      align-items: start;
-      justify-content: center;
-      box-sizing: border-box;
-      padding-top: 1cm;
-      padding-bottom: 1cm;
+      flex-direction: row-reverse;  
+      justify-content: flex-start;  
+      align-items: center;
+      gap: 8px;
+      text-align: right;
+    }
+
+
+    img{
+      max-width: 100%;
+    }
+
+    .thumbnail-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;  
+      align-items: center;      
+    }
+    .thumbnail {
+      display: block;           
+      margin: 0 auto;           
+    }
+
+    .page-break {
       page-break-after: always;
     }
 
-    .article-inner {
-      max-width: 90%;
-      background-color: white;
-      padding: 16px 20px;
-      box-sizing: border-box;
-      border-radius: 8px;
-    }
 
-    .title {
-      font-weight: bold;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
 
-    .meta, .author {
-      font-style: italic;
-      font-size: 12px;
-      margin-bottom: 8px;
-    }
-
-    .content {
-      font-size: 14px;
-      text-align: justify;
-      margin-bottom: 16px;
-    }
-
-    img.thumbnail {
-      max-width: 100%;
-      max-height: 16cm;
-      height: auto;
-      display: block;
-      margin: 10px auto;
-      border-radius: 6px;
-    }
-
-    img.pfp {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
-
-    /* Contenuti nel testo (editor) */
-    .content img {
-      max-width: 100%;
-      max-height: 16cm;
-      height: auto;
-      display: block;
-      margin: 10px auto;
-    }
   </style>
 </head>
 <body>
@@ -85,10 +83,12 @@
       <div class="article-inner">
         <div class="title">{{ article.title }}</div>
         <div class="meta">{{ article.metadata.published_date }}</div>
-
+        
+        <div class="thumbnail-container">
         {% if article.metadata.imgix_url %}
           <img src="{{ article.metadata.imgix_url }}" class="thumbnail" />
         {% endif %}
+        </div>
 
         {% if article.metadata.teaser %}
           <div class="content">{{ article.metadata.teaser | safe }}</div>
@@ -100,14 +100,12 @@
 
         {% if article.metadata.author %}
           <div class="author">
-            {% if article.metadata.author.pfp %}
-              <img src="{{ article.metadata.author.pfp }}" class="pfp" />
-            {% endif %}
             {{ article.metadata.author.title or 'Autore sconosciuto' }}
           </div>
         {% endif %}
       </div>
     </div>
+    <div class="page-break"></div>
   {% endfor %}
 </body>
 </html>

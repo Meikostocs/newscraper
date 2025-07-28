@@ -49,7 +49,7 @@ class RHCScraper(Scraper):
                         date_obj = datetime.strptime(raw_date, "%d/%m/%Y")
                     except ValueError:
                         date_obj = datetime.strptime(raw_date, "%d/%m/%y")
-                    date = date_obj.strftime("%b, %d %Y")
+                    date = date_obj.strftime("%b %d, %Y")
                 else:
                     date = None
 
@@ -115,7 +115,7 @@ class RHCScraper(Scraper):
         created_at = None
         if date_match:
             day, month_it, year = date_match.split()
-            created_at = f"{months.get(month_it, 'Jan')}, {int(day):02d} {year}"
+            created_at = f"{months.get(month_it, 'Jan')} {int(day):02d}, {year}"
 
 
         img_tag = soup.select_one("img.wp-post-image")

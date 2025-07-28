@@ -48,7 +48,7 @@ class MMULScraper(Scraper):
                 time_tag = div.select_one('div.wp-block-post-date time')
                 date = time_tag['datetime'] if time_tag else None
                 dt = parse(date)
-                date = dt.strftime("%B %d, %Y")
+                date = dt.strftime("%b %d, %Y")
                 
                 teaser_p = div.select_one('div.wp-block-post-excerpt p')
                 teaser = teaser_p.text.strip() if teaser_p else None
