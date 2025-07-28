@@ -89,5 +89,6 @@ This application is intended to run locally or within a private environment, but
 - For improved privacy and security, consider accessing the app via a **VPN** (e.g. WireGuard, OpenVPN) to keep traffic encrypted and internal.
 
 Make sure you understand the implications of exposing services to the public internet.
+
 ---
 

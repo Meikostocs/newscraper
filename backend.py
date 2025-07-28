@@ -6,14 +6,24 @@ from urllib.parse import urlparse
 from utils.extractor import extract_between
 from utils.parser import parse_date, get_scraper_classes, sanitize_parameters
 
+# Dictionary mapping each domain to its corresponding scraper class
 SCRAPER_MAP = get_scraper_classes()
 
 app = Flask(__name__)
-CORS(app)  # Permette richieste da React (localhost:3000)
+CORS(app) 
 
 
 @app.route('/api/posts', methods=['POST'])
 def get_post():
+    """
+    Retrieve a single article from a specific URL.
+
+    - Expects a JSON payload with a 'url' field.
+    - Determines the appropriate scraper based on the domain.
+    - Calls the scraper's `get_article()` method to extract the article content.
+    - Sanitizes the result to remove potentially unsafe content.
+    - Returns the article as a JSON response.
+    """
     data = request.json
     url = data.get('url')
     scraper_class = SCRAPER_MAP.get(urlparse(url).netloc.replace("www.", ""))
@@ -22,6 +32,15 @@ def get_post():
 
 @app.route('/api/posts', methods=['GET'])
 def get_all_posts():
+    """
+    Retrieve a list of articles from all registered scraper sources.
+
+    - Iterates over all configured scraper classes.
+    - Calls each scraper's `scrape()` method to fetch articles.
+    - Sorts articles by publication date (most recent first).
+    - Sanitizes each article.
+    - Returns a JSON array of all posts.
+    """
     posts = []
     for _, scraper_class in SCRAPER_MAP.items():
         posts += scraper_class.scrape().copy()
