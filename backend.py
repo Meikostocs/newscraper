@@ -94,7 +94,7 @@ def generate_newspaper():
     pdf_io = BytesIO()
     HTML(string=html).write_pdf(pdf_io)
     pdf_io.seek(0)
-    return send_file(pdf_io, download_name=f"newspaper.pdf", mimetype="application/pdf")
+    return send_file(pdf_io, download_name=f"newspaper.pdf", mimetype="application/pdf", as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=False)
