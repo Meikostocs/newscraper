@@ -10,4 +10,6 @@ bleepingcomputer.com:
   name: BleepingComputer
   base_url: https://www.bleepingcomputer.com
 
-  
+redhotcyber.com:
+  name: RedHotCyber
+  base_url: https://www.redhotcyber.com
