@@ -83,7 +83,6 @@ def generate_newspaper():
     yesterday = datetime.now().date() - timedelta(days=1)
     for _, scraper in SCRAPER_MAP.items():
         for a in scraper.scrape():
-            print(_)
             date_str = a["metadata"]["published_date"]
             pub_date = datetime.strptime(date_str, "%b %d, %Y").date()
             if  yesterday == pub_date:

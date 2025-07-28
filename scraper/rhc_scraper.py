@@ -128,8 +128,6 @@ class RHCScraper(Scraper):
 
         new_text = str(soup)
         text = extract_between(new_text, '</b></span><p>', '<div class="tag-list"')        
-        with open("out.txt",'w') as fout:
-            fout.write(new_text)
 
         article = {
             "id": article_id,
