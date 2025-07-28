@@ -8,11 +8,13 @@ from dateutil.parser import parse
 from scraper.mmul_scaper import MMULScraper
 from scraper.foss_scraper import FOSSScraper
 from scraper.bleepingcomputer_scraper import BleepingComputerScraper
+from scraper.rhc_scraper import RHCScraper
 
 SCRAPER_CLASSES = {
-    "FOSSScraper": FOSSScraper,
-    "MMULScraper": MMULScraper,
-    "BleepingComputer": BleepingComputerScraper
+    # "FOSSScraper": FOSSScraper,
+    # "MMULScraper": MMULScraper,
+    # "BleepingComputer": BleepingComputerScraper,
+    "RedHotCyber": RHCScraper
 }
 
 ALLOWED_TAGS = ['p', 'ul', 'ol', 'li', 'strong', 'em', 'blockquote', 'a', 'h2', 'h3', 'br', 'img']
