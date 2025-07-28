@@ -46,7 +46,6 @@ class FOSSScraper(Scraper):
                 'metadata': {
                     'published_date': date,
                     'author': {'title': author, 'pfp': self.default_pfp},
-                    'date': date,
                     'imgix_url': img_url,
                     'teaser': teaser,
                 }
@@ -98,8 +97,7 @@ class FOSSScraper(Scraper):
 
         extracted_html = extract_between(resp.text, '<p>', '<div class="saboxplugin-wrap"')
         soup = BeautifulSoup(extracted_html, 'html.parser')
-        print(extracted_html)
-
+        
         for ad in soup.select('.fossf-in-article-1, .fossf-in-article-3, .sharedaddy'):
             ad.decompose()
 

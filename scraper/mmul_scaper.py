@@ -57,7 +57,6 @@ class MMULScraper(Scraper):
                     'metadata':{
                         'published_date':date,
                         'author': {'title':author, "pfp": self.default_pfp},
-                        'date': date,
                         'imgix_url': img_url,
                         'teaser': teaser,
                     }

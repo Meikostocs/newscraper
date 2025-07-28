@@ -59,7 +59,6 @@ class BleepingComputerScraper(Scraper):
                                 'title': author,
                                 'pfp': self.default_pfp
                             },
-                            'date': date,
                             'imgix_url': img_url,
                             'teaser': teaser
                         }

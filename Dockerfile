@@ -1,9 +1,14 @@
-FROM node:18-alpine
+FROM python:3.11-slim
+
 WORKDIR /app
-COPY package.json ./*
-RUN npm install
+
+# Install system dependencies if needed (e.g., for BeautifulSoup)
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
 
+# Backend runs on 8000 but not exposed outside
+CMD ["python", "backend.py"]
