@@ -33,7 +33,7 @@ class FOSSScraper(Scraper):
             byline = article_tag.select_one('.post-byline')
             author = byline.text.strip().split(' on ')[0].replace("By ", "")
             date = byline.text.strip().split(' on ')[-1].split(' | ')[0].strip()
-
+            
             img_tag = article_tag.select_one('.featured-image img')
             img_url = img_tag['src'] if img_tag else None
 

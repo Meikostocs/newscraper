@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 1cm;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page {
+      background-color: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: start;
+      justify-content: center;
+      box-sizing: border-box;
+      padding-top: 1cm;
+      padding-bottom: 1cm;
+      page-break-after: always;
+    }
+
+    .article-inner {
+      max-width: 90%;
+      background-color: white;
+      padding: 16px 20px;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+
+    .title {
+      font-weight: bold;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .meta, .author {
+      font-style: italic;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .content {
+      font-size: 14px;
+      text-align: justify;
+      margin-bottom: 16px;
+    }
+
+    img.thumbnail {
+      max-width: 100%;
+      max-height: 16cm;
+      height: auto;
+      display: block;
+      margin: 10px auto;
+      border-radius: 6px;
+    }
+
+    img.pfp {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    /* Contenuti nel testo (editor) */
+    .content img {
+      max-width: 100%;
+      max-height: 16cm;
+      height: auto;
+      display: block;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+<body>
+  {% for article in articles %}
+    <div class="page">
+      <div class="article-inner">
+        <div class="title">{{ article.title }}</div>
+        <div class="meta">{{ article.metadata.published_date }}</div>
+
+        {% if article.metadata.imgix_url %}
+          <img src="{{ article.metadata.imgix_url }}" class="thumbnail" />
+        {% endif %}
+
+        {% if article.metadata.teaser %}
+          <div class="content">{{ article.metadata.teaser | safe }}</div>
+        {% endif %}
+
+        {% if article.text %}
+          <div class="content">{{ article.text | safe }}</div>
+        {% endif %}
+
+        {% if article.metadata.author %}
+          <div class="author">
+            {% if article.metadata.author.pfp %}
+              <img src="{{ article.metadata.author.pfp }}" class="pfp" />
+            {% endif %}
+            {{ article.metadata.author.title or 'Autore sconosciuto' }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</body>
+</html>

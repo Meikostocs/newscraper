@@ -4,6 +4,7 @@ from dateutil.parser import parse
 from utils.extractor import extract_between
 from scraper.scraper import Scraper
 import re
+import jsonify
 
 class BleepingComputerScraper(Scraper):
 
